@@ -1,0 +1,97 @@
+\section{Method}\label{method}
+
+This section presents the proposed framework for dynamic clustering in evolving
+data streams. The method is designed to capture both short-term structural
+changes and long-term recurrence patterns by extending cluster transition
+modeling, introducing new similarity measures, and integrating them into a
+modular clustering architecture.
+
+\subsection{New Transition Types}
+This work extends traditional cluster evolution events by introducing three new
+recurrence-aware transitions: \textbf{reappearance} (a previously disappeared
+cluster re-emerges), \textbf{remerge} (previously split clusters recombine),
+and \textbf{resplit} (previously merged clusters split again).
+
+Cluster evolution is modeled using a graph-based representation, where nodes
+correspond to clusters at different timestamps and edges indicate overlap
+relationships. This structure enables interpretable identification of both
+classical transitions (appearance, disappearance, split, merge) and the newly
+introduced recurrence transitions, allowing a more realistic modeling of
+evolving data streams over extended periods.
+
+\subsection{Overlapping Scores}
+To quantify cluster similarity and guide transition detection, two overlapping
+scores are introduced.
+
+\paragraph{Spherical Overlapping Score (SOS).}
+For approximately spherical clusters $C_i$ and $C_j$, such as those from
+K-means, with centers $\boldsymbol{\mu}_i, \boldsymbol{\mu}_j$ and radii $r_i,
+    r_j$, the SOS is defined as:
+\[
+    \text{SOS}(C_i, C_j) = 2^{- \frac{||\boldsymbol{\mu}_i - \boldsymbol{\mu}_j||_2}{r_i + r_j}}.
+\]
+This value ranges between 0 and 1, decays smoothly with distance, and naturally
+defines a threshold at 0.5 to indicate potential evolutionary continuity.
+
+\paragraph{Effective Overlapping Score (EffectiveOS).}
+For clusters modeled as Gaussian distributions with means $\boldsymbol{\mu}_i,
+    \boldsymbol{\mu}_j$ and covariances $\Sigma_i, \Sigma_j$, EffectiveOS
+generalizes SOS by employing the Mahalanobis distance:
+
+{\scriptsize
+\begin{align}
+    \text{EffectiveOS}(C_i, C_j)                & = 2^{- \frac{d_M(\boldsymbol{\mu}_i, \boldsymbol{\mu}_j)}{\text{EffSize}_i + \text{EffSize}_j}},                    \\
+    d_M(\boldsymbol{\mu}_i, \boldsymbol{\mu}_j) & = \sqrt{(\boldsymbol{\mu}_i - \boldsymbol{\mu}_j)^\top \Sigma_{ij}^{-1} (\boldsymbol{\mu}_i - \boldsymbol{\mu}_j)}, \\
+    \Sigma_{ij}                                 & = \frac{\Sigma_i + \Sigma_j}{2}.
+\end{align}}
+
+Here, $\text{EffSize}_i$ is a confidence-aware effective size based on
+principal variances:
+\[
+    \text{EffSize}_i = \sqrt{\frac{1}{d} \sum_{\ell=1}^{d} (\chi^2_\alpha \sqrt{\lambda_{\ell,i}})^2},
+\]
+where $\lambda_{\ell,i}$ are the eigenvalues of $\Sigma_i$ and $\chi^2_\alpha$
+is the chi-squared critical value at confidence $\alpha$. EffectiveOS remains
+bounded in $(0,1]$ while capturing directional variability and correlation in
+ellipsoidal clusters.
+
+\subsection{Dynamic Clustering Framework}
+The proposed framework is modular, consisting of five integrated components.
+
+\paragraph{Online phase (micro-clustering).}
+Streaming data is summarized into compact statistical representations in real
+time. In this work, \textit{CluStream}~\cite{clustream} is employed to ensure
+efficiency under memory and latency constraints while retaining essential
+structure.
+
+\paragraph{Triggering strategy.}  
+A strategy determines when to perform macro-clustering, based either on fixed
+time intervals or on data-driven signals that indicate significant
+distributional change. For simplicity, and to remain coherent with the original
+\textit{CluStream} design, we adopt fixed intervals as the triggering mechanism
+in this work.
+
+\paragraph{Offline phase (macro-clustering).}
+Micro-clusters are aggregated into higher-level groups. Gaussian Mixture Models
+provide flexible representations in which the number of clusters can adapt
+dynamically to capture complex evolving structures.
+
+\paragraph{History module.}
+Minimal descriptors of past clusters are maintained to track long-term
+dynamics. This enables the detection of recurrence patterns such as
+\emph{reappearance}, \emph{remerge}, and \emph{resplit}.
+
+\paragraph{Tracking module.}
+Macro-clusters across different time steps are compared using similarity
+measures such as SOS or EffectiveOS. This facilitates the identification of
+structural changes and the reconstruction of historical trajectories.
+
+The framework produces a comprehensive report, including graph-based
+visualizations of cluster transitions, spatial trajectories of macro-cluster
+evolution, and representative data samples.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{Images/my_images/architecture.png}
+    \caption{Proposed architecture for the dynamic clustering framework.}
+\end{figure}

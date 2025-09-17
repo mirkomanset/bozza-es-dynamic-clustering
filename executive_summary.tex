@@ -29,11 +29,16 @@
 
 % PACKAGES FOR IMAGES
 \usepackage{graphicx}
-\graphicspath{{Images/}} % Path for images' folder
+\usepackage{transparent} % Enables transparent images
 \usepackage{eso-pic} % For the background picture on the title page
-\usepackage{subfig} % Numbered and caption subfigures using \subfloat
+\usepackage{subfig} % Numbered and caption subfigures using \subfloat.
+\usepackage{tikz} % A package for high-quality hand-made figures.
+\usetikzlibrary{positioning, shapes.geometric, arrows.meta, fit}
+\graphicspath{{./Images/}} % Directory of the images
 \usepackage{caption} % Coloured captions
-\usepackage{transparent}
+\usepackage{xcolor} % Coloured captions
+\usepackage{amsthm,thmtools,xcolor} % Coloured "Theorem"
+\usepackage{float}
 
 % STANDARD MATH PACKAGES
 \usepackage{amsmath}
@@ -103,12 +108,12 @@
 % -> MSc course
 \newcommand{\course}{Computer Science And Engineering}
 % -> advisor name and surname
-\newcommand{\advisor}{Prof. Name Surname}
+\newcommand{\advisor}{Prof. Marcello Restelli}
 % IF AND ONLY IF you need to modify the co-supervisors you also have to modify the file Configuration_files/title_page.tex (ONLY where it is marked)
-\newcommand{\firstcoadvisor}{Name Surname, Name Surname} % insert if any otherwise comment
+\newcommand{\firstcoadvisor}{Alessio Russo, Lorenzo Bisi} % insert if any otherwise comment
 % \newcommand{\secondcoadvisor}{Alessio Russo} % insert if any otherwise comment
 % -> academic year
-\newcommand{\YEAR}{2022-2023}
+\newcommand{\YEAR}{2025-26}
 
 %-------------------------------------------------------------------------
 %	BEGIN OF YOUR DOCUMENT
@@ -122,18 +127,17 @@
 % This file creates the Title Page of the document
 \input{Configuration_files/title_page}
 
+\input{Chapters/0_introduction}
 
-\input{Chapters/0_intro}
+\input{Chapters/1_preliminaries}
 
-\input{Chapters/1_back}
+\input{Chapters/2_problem_formulation}
 
-\input{Chapters/2_problem_form}
+\input{Chapters/3_method}
 
-\input{Chapters/3_methods}
+\input{Chapters/4_experiments}
 
-\input{Chapters/4_exps}
-
-\input{Chapters/5_conc}
+\input{Chapters/5_conclusion}
 
 \bibliography{bibliography.bib} 
 

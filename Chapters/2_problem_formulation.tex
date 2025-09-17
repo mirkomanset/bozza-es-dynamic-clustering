@@ -1,0 +1,88 @@
+\section{Problem Formulation}\label{ch:problem_formulation}
+
+This thesis addresses the problem of clustering in evolving data streams, where
+the underlying distributions are non-stationary and subject to drift over time.
+Traditional clustering methods assume access to fixed datasets and static
+distributions, making them unsuitable for environments where data arrives
+continuously and patterns evolve. The aim is to establish a framework that can
+process data incrementally while also tracking and interpreting how clusters
+change across time.
+
+\subsection{Streaming Clustering}\label{sec:prob_streaming_clustering}
+
+A data stream can be described as a potentially infinite sequence of
+$d$-dimensional observations
+$\mathcal{X}=\{\mathbf{x}^t\}_{t=1}^{\infty}$. The task of streaming clustering
+is to incrementally partition these observations into coherent groups while
+meeting strict constraints on memory and computation. At each time $t$, the
+algorithm produces a clustering $C^t=\{C_1^t,\dots,C_{k_t}^t\}$, where the
+number of clusters $k_t$ and their composition may vary as new data arrives.
+
+Unlike static clustering, streaming clustering must adapt to non-stationary
+conditions. Distributions often evolve gradually rather than abruptly, and
+patterns may recur over time, reflecting realistic phenomena such as seasonal
+effects or user behavior. A useful abstraction is that of \emph{piecewise
+regular drift}, where the stream consists of consecutive phases within which
+distributional change is smooth, while transitions between phases are bounded.
+This perspective avoids both unrealistic assumptions of perfect stability and
+the intractability of arbitrary change. Streaming clustering algorithms must
+therefore balance two goals: producing stable partitions within phases while
+remaining responsive to evolving structure.
+
+\subsection{Tracking Clusters}\label{sec:prob_tracking_clusters}
+
+As data distributions shift, the structure of clusters also changes. The
+clustering $C^t$ at time $t$ may differ substantially from $C^\tau$ at a later
+time $\tau$, requiring mechanisms to model and track transitions. Typical transitions
+include the appearance of new clusters, the disappearance of old ones, splits
+and merges, and the survival of clusters that persist with limited change. These
+events provide a structural description of how patterns in the data evolve.
+
+To formalize transitions, clusters at different times are compared by measuring
+their degree of \emph{overlap}. Depending on the representation, overlap can be defined
+by shared elements, similarity of centroids, or proximity of cluster boundaries.
+If the overlap exceeds a given threshold, two clusters are considered related.
+This principle allows consistent mapping of clusters across time and supports
+the identification of cluster transitions.
+
+Beyond \emph{external transitions}, which describe how clusters relate across time,
+\emph{internal transitions} capture changes within a single surviving cluster. These
+include expansion or shrinkage in size, variation in density, and shifts in the
+centroid. While such internal dynamics offer useful insights, the primary focus
+in this work is on external transitions, which provide a clearer view of the
+structural evolution of the clustering model.
+
+Tracking clusters in dynamic streams presents several challenges. Distributional
+drift may be gradual or abrupt, making it difficult to decide when two clusters
+should be linked. Noise and outliers may obscure genuine transitions, while
+overlapping clusters can create ambiguity. Furthermore, the absence of ground
+truth in streaming settings complicates evaluation, requiring surrogate measures
+or application-driven validation.
+
+\subsection{Dynamic Clustering}\label{sec:dynamic_clustering}
+
+Dynamic clustering integrates streaming clustering with temporal cluster
+tracking, offering a unified framework for understanding the evolution of data
+distributions. The objective is not only to efficiently cluster data as it
+arrives, but also to interpret how clusters emerge, evolve, and dissolve over
+time. This dual perspective provides richer insights than static methods,
+especially in domains where understanding dynamics is as valuable as achieving
+accurate predictions.
+
+Several analytical goals motivate this framework. First, by observing the
+history of clusters, it becomes possible to explain when and how drift occurs
+and to link these changes to external factors. Second, monitoring the lifecycle
+of clusters supports concept evolution analysis, where patterns emerge,
+stabilize, and eventually disappear. Third, sudden transitions, such as abrupt
+merges or splits, can serve as indicators of anomalies or significant events in
+the underlying system. Finally, dynamic clustering supports interpretability by
+enabling visualization of cluster trajectories, timelines, or trees, helping
+experts make sense of complex temporal patterns.
+
+In summary, dynamic clustering treats clustering as an evolving process rather
+than a one-off computation. It unites the efficiency of online algorithms with
+the interpretability required to analyze changes in non-stationary
+environments. This formulation provides the foundation for adaptive and
+trustworthy clustering systems that can operate effectively under continuous
+change.
+

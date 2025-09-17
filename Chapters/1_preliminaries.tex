@@ -1,0 +1,103 @@
+\section{Preliminaries}\label{ch:preliminaries}
+
+This section introduces foundational concepts essential for understanding
+clustering in streaming environments, the challenges of evolving data
+distributions, and the role of explainability in drift analysis.
+
+\subsection{Clustering}\label{sec:clustering}
+
+Clustering is a core task in unsupervised learning, aiming to partition a
+dataset $D = \{\mathbf{x}_1, \dots, \mathbf{x}_N\}$ into $K$ clusters $C_1,
+    \dots, C_K$ such that intra-cluster similarity is maximized while inter-cluster
+similarity is minimized. Formally, an optimal clustering $\hat{C}$ minimizes a
+task-specific objective function $\mathcal{J}(C; D)$ over the set of valid
+partitions $\mathcal{C}$:
+\[
+    \hat{C} = \arg\min_{C \in \mathcal{C}} \mathcal{J}(C; D).
+\]
+
+Several classical approaches exemplify this principle. \emph{K-means}
+partitions data into $K$ clusters by iteratively assigning points to the
+nearest centroid $\boldsymbol{\mu}_j$ and updating centroids to minimize the
+within-cluster sum of squares:
+\[
+    J(\mathcal{X}, \mu) = \sum_{i=1}^{N} \sum_{j=1}^{K} q_{ij} \|\mathbf{x}_i - \boldsymbol{\mu}_j\|_2^2.
+\]
+Although computationally efficient, K-means is limited to convex clusters and
+assumes equal variance among groups. By contrast, \emph{Gaussian Mixture Models
+    (GMMs)} describe data as a mixture of $K$ Gaussian distributions with
+parameters $\{\pi_j, \boldsymbol{\mu}_j, \mathbf{\Sigma}_j\}$. Using the
+Expectation-Maximization algorithm, GMMs provide soft cluster assignments
+through posterior probabilities $\gamma_{ij}$, allowing the representation of
+clusters with different shapes, sizes, and orientations.
+
+Assessing the quality of a clustering solution can be achieved through both
+internal and external metrics. Internal metrics, such as the Silhouette
+coefficient and the Davies-Bouldin Index (DBI), evaluate the cohesion and
+separation of clusters without requiring ground-truth labels. External metrics,
+including the Adjusted Rand Index (ARI) and Normalized Mutual Information
+(NMI), instead compare predicted clusters against known labels while correcting
+for chance agreements. Together, these measures provide complementary
+perspectives for evaluating clustering outcomes in both labeled and unlabeled
+scenarios.
+
+\subsection{Streaming Learning}\label{sec:stream_learning}
+
+In real-world applications, data often arrives as an unbounded stream.
+Streaming learning algorithms incrementally update a model $\mathcal{M}_t$ with
+each new point $\mathbf{x}_t$ via an update function $\mathcal{F}$:
+\[
+    \mathcal{M}_{t+1} = \mathcal{F}(\mathcal{M}_t, \mathbf{x}_t),
+\]
+allowing continuous adaptation while operating under bounded memory and
+computational constraints. This paradigm requires balancing stability and
+adaptability to changes in the data distribution.
+
+\subsection{Data Drift}\label{sec:data_drift}
+
+\textbf{Data drift}~\cite{drift_adaptation_survey} refers to changes in the statistical properties of data over time,
+which may lead to performance degradation in machine learning models. Formally, drift
+occurs between time $t$ and $\tau$ if $p_t(X, y) \neq p_\tau(X, y)$, where $X$ denotes the feature vector and $y$ the target variable.
+
+Two main forms are usually distinguished.~\emph{Real drift} arises when the
+conditional distribution $p(y \mid X)$ changes, directly altering the decision
+function, whereas \emph{virtual drift} occurs when the marginal distribution
+$p(X)$ evolves while the relationship $p(y \mid X)$ remains stable.
+
+Drift can occur in different temporal dynamics, ranging from abrupt and
+incremental to gradual or recurring changes. Detecting these shifts is
+essential, as it enables timely model adaptation. Common strategies for drift
+detection either monitor model performance, compare data distributions, or
+combine multiple signals to increase robustness.
+
+Once drift is identified, adaptation mechanisms are required to maintain
+predictive accuracy. Two main approaches are commonly adopted. \emph{Blind
+    adaptation} updates models continuously or periodically, regardless of whether
+drift has occurred, while \emph{informed adaptation} performs updates only when
+drift is detected, thereby improving efficiency. Adaptation may involve
+retraining, incremental updates, or ensemble strategies in which classifiers
+are replaced or reweighted. These mechanisms allow models to cope with both
+simple and complex forms of drift, as well as recurring patterns in data
+streams.
+
+\subsection{Drift Explainability}\label{sec:drift_explainability}
+
+Drift explainability aims to identify the causes and features responsible for
+changes in data distributions, thereby clarifying why model performance may
+degrade over time. One common approach is \emph{feature importance
+    analysis}~\cite{feture_importance_for_drift_explainabilty}, in which the
+contribution $\phi_i$ of each feature is compared between models trained on
+reference and production datasets. Large discrepancies, quantified as $\Delta
+    \phi_i = |\phi_i^{\text{ref}} - \phi_i^{\text{prod}}|$, reveal which variables
+are most influential in driving the drift. Another powerful technique is the
+\emph{Classifier Two-Sample Test}
+(C2ST)~\cite{revisiting_two_sample_classifier}, where the reference and
+production datasets are treated as separate classes and a classifier is trained
+to distinguish between them. The feature importances extracted from this
+classifier highlight the dimensions that contribute most to the observed
+distributional change.
+
+By providing insight into the underlying factors behind drift, explainable
+detection methods ensure that model updates are both necessary and effectively
+targeted. This enhances the trustworthiness and reliability of adaptive systems
+in streaming and dynamic environments.

@@ -1,0 +1,83 @@
+\section{Experiments}\label{sec:experiments}
+
+This section summarizes the evaluation of the proposed dynamic clustering
+algorithm on two datasets: a typographical drift dataset derived from the 20
+Newsgroups corpus and a real image dataset of fruits. These experiments highlight the
+algorithm's ability to adapt to evolving data distributions for both text and
+image data.
+
+\subsection{Typographical Drift Dataset}\label{subsec:typographical_drift}
+
+To assess robustness under linguistic noise, a subset of the 20
+Newsgroups~\cite{20newsgroups} dataset was used, consisting of four categories:
+\emph{rec.autos}, \emph{comp.graphics}, \emph{sci.med}, and
+\emph{rec.sport.baseball}. Initially, clean documents were sampled to form a
+reference distribution. Gradually, typographical noise was introduced through
+character-level modifications such as insertions, deletions, replacements, and
+swaps, simulating progressive degradation of text quality.
+
+Each document was embedded into a 384-dimensional semantic vector using the
+\texttt{all-MiniLM-L6-v2} transformer model~\cite{sentence-transformers}, and
+reduced to 32 dimensions using UMAP~\cite{umap}. The algorithm was configured
+with $q=200$ micro-clusters, a streaming window $\Delta=100$, a
+macro-clustering interval $I=100$, an overlapping threshold $\varepsilon=0.5$
+and a confidence level $\alpha=0.9$.
+
+\input{figures/text_typos_rsamples.tex}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{my_images/experiment_results/text_typos/graph.png}
+    \caption{Graphical evolution of Typographical Drift clusters over time.}
+\end{figure}
+
+Over the course of the experiment, the algorithm tracked the evolution of
+clusters in response to increasing noise. Initially, the drift manifested as
+subtle splits from existing clusters, with merging and re-splitting observed as
+the text gradually degraded. When the text became heavily corrupted, fully
+distinct clusters emerged, reflecting pronounced shifts in the data
+distribution. These results demonstrate the algorithm's sensitivity to both
+gradual and substantial changes, capturing complex temporal dynamics in textual
+data.
+
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=1\linewidth]{my_images/experiment_results/text_typos/selected_spatial.png}
+%     \caption{Spatial evolution of Typographical Drift clusters showing temporal progression.}
+% \end{figure}
+
+\subsection{Fruits Dataset}\label{subsec:fruits}
+
+The Fruits dataset consists of 2,420 RGB images of tangerines, resized to $100
+    \times 100$ pixels. Background segmentation was applied using
+GrabCut~\cite{grabcut}, and high-dimensional embeddings were extracted using a
+pretrained ResNet-50~\cite{resnet} network. The embeddings were reduced to 64
+dimensions with UMAP~\cite{umap}. The first 200 images served as reference
+data, and the remaining 2,220 images were progressively ingested.
+Hyperparameters were set to $q=200$, $\Delta=50$, $I=50$, $\varepsilon=0.5$ and
+$\alpha=0.9$.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{my_images/experiment_results/fruits/selected_rsamples.png}
+    \caption{Representative Samples of clusters of Fruit Images.}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{my_images/experiment_results/fruits/selected_spatial.png}
+    \caption{Spatial evolution of clusters of Fruit Images showing temporal progression.}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\linewidth]{my_images/experiment_results/fruits/graph.png}
+    \caption{Graphical evolution of Fruit Images clusters over time.}
+\end{figure}
+
+The algorithm successfully captured the emergence of new tangerine types and
+gradual visual changes over time. Clusters corresponded to distinct
+characteristics such as color (green, yellow, orange) and shape (round or
+oval). While minor splits were occasionally missed due to sensitivity
+thresholds, major transitions, including the appearance of orange tangerines,
+were clearly detected.
