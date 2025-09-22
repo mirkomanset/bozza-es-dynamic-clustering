@@ -1,0 +1,25 @@
+\begin{algorithm}[ht]
+    \caption{CluStream Micro-Clustering}
+    \begin{algorithmic}[1]
+        \REQUIRE Incoming data point $\mathbf{x}$ at time $t$, list of micro-clusters $\mathcal{MC}$, max number of micro-clusters $q$, time window $\Delta$
+        \ENSURE Updated list of micro-clusters $\mathcal{MC}$
+
+        \STATE Find nearest micro-cluster $MC_j$ to $\mathbf{x}$
+        \IF{$\mathbf{x}$ fits into $MC_j$}
+        \STATE Assign $\mathbf{x}$ to $MC_j$
+        \ELSE
+        \STATE Create a new micro-cluster $MC_{new}$ for $\mathbf{x}$
+        \IF{$|\mathcal{MC}| < q$}
+        \STATE Add $MC_{new}$ to $\mathcal{MC}$
+        \ELSE
+        \IF{there exists $MC_{old} \in \mathcal{MC}$ such that $t - t_{MC_{old}} > \Delta$}
+        \STATE Replace $MC_{old}$ with $MC_{new}$
+        \ELSE
+        \STATE Find the two closest micro-clusters $MC_a, MC_b$
+        \STATE Merge $MC_a$ and $MC_b$ into $MC_{merged}$
+        \STATE Insert $MC_{new}$ into $\mathcal{MC}$
+        \ENDIF
+        \ENDIF
+        \ENDIF
+    \end{algorithmic}
+\end{algorithm}

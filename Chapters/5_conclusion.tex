@@ -1,13 +1,14 @@
-\section{Conclusions}
+\section{Conclusions}\label{sec:conclusions}
 
 This thesis explored dynamic clustering in non-stationary data streams, where
 traditional static methods cannot adapt to evolving distributions and recurring
 structures. A modular and adaptive framework was developed to maintain
-temporally coherent and interpretable clusters, supported by a typology of
-transitions, \emph{survival}, \emph{absorption}, \emph{splitting}, and long-term
-patterns such as \emph{reappearance}, \emph{remerge}, and \emph{resplit}. Novel
-overlap metrics, including the \emph{Spherical Overlapping Score (SOS)} and the
-\emph{Effective Overlapping Score (EffectiveOS)}, provide geometry-aware criteria to robustly
+temporally coherent and interpretable clusters, supported by a set of
+transitions, \emph{appearance}, \emph{disappearance}, \emph{survival},
+\emph{merge}, \emph{split}, and long-term patterns such as
+\emph{reappearance}, \emph{remerge}, and \emph{resplit}. Novel overlap metrics,
+including the \textsc{Spherical Overlapping Score (SOS)} and the \textsc{Effective
+    Overlapping Score (EffectiveOS)}, provide geometry-aware criteria to robustly
 detect cluster transitions, enhancing interpretability and robustness under
 gradual drift or recurring patterns.
 
@@ -17,10 +18,10 @@ effectiveness in capturing evolving cluster structures over time and providing
 human-interpretable insights into data dynamics.
 
 Future developments include extending the framework to density-based clustering
-algorithms (e.g., DBSCAN, HDBSCAN) by designing new overlap metrics suited to
+algorithms (e.g., \textsc{DBSCAN}, \textsc{HDBSCAN}) by designing new overlap metrics suited to
 non-centroid clusters. The modular architecture allows integration of
 alternative clustering methods and distance functions, as well as advanced
 triggering strategies informed by drift detection. Another promising direction
 is forecasting cluster transitions, leveraging the temporal metadata produced
-by the framework to anticipate structural changes and enable timely
-adaptation in dynamic data streams.
+by the framework to anticipate structural changes and enable timely adaptation
+in dynamic data streams.

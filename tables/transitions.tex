@@ -1,0 +1,24 @@
+\begin{table}[t]
+    \centering
+    {\footnotesize
+        \begin{tabularx}{\columnwidth}{|l|c|X|}
+            \hline
+            \textbf{Transition} & \textbf{Notation}                                 & \textbf{Formal Definition}                                       \\
+            \hline
+            Appearance          & $\emptyset^t \rightarrow C_j^\tau$                &
+            $\nexists C_i^t \in C^t: C_i^t \circledast C_j^{\tau}$                                                                                     \\
+            \hline
+            Disappearance       & $C_i^t \rightarrow \emptyset^{\tau}$              & $\nexists C_j^{\tau} \in C^{\tau}: C_i^t \circledast C_j^{\tau}$ \\
+            \hline
+            Split               & $C_i^t \rightarrow \{C_1^\tau, \dots, C_v^\tau\}$ & $\forall j \in \{1, \dots, v\}: C_i^t  \circledast C_j^{\tau}$   \\
+            \hline
+            Merge               & $\{C_1^t, \dots, C_u^t\} \rightarrow C_j^\tau$    & $\forall i \in \{1, \dots, u\}: C_i^t  \circledast C_j^{\tau}$   \\
+            \hline
+            Survival            & $C_i^t \rightarrow C_j^\tau$                      & $C_i^t \circledast C_j^\tau \land
+                \nexists\, C_u^t \in C^t \setminus \{C_i^t\}: C_u^t \circledast C_j^\tau \land
+            \nexists\, C_v^\tau \in C^\tau \setminus \{C_j^\tau\}: C_i^t \circledast C_v^\tau$                                                         \\
+            \hline
+        \end{tabularx}
+    }
+    \caption{Formal definitions of cluster transitions. All transitions are defined from time $t$ to a future time $\tau$ with $t < \tau$.}\label{table:cluster_transitions}
+\end{table}
